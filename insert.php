@@ -12,7 +12,7 @@ $book_comment = $_POST['book_comment'];
 try {   //try~catchやってみてエラーが出たら表示する関数。
   //PDOは、3つの引数を指定する。('接続するmysqlの場所','root'(一番権限の強いユーザー名のこと),''(PWはXAMPPではブランクでOK)
   //Password:MAMP='root',XAMPP=''
-  $pdo = new PDO('mysql:dbname=gs_db;charset=utf8;host=localhost','root','');
+  $pdo = new PDO('mysql:dbname=kaoriharada_gs_db;charset=utf8;host=mysql57.kaoriharada.sakura.ne.jp','kaoriharada','*****');
 } catch (PDOException $e) {
   exit('DB Connection Error:'.$e->getMessage());
 }
