@@ -1,8 +1,30 @@
+<?php
+$id = $_GET['id'];
+
+//1.DB接続*** 外部ファイルを読み込む ***
+include("funcs.php");
+$pdo = db_conn();
+
+//２．SQLから特定のidを取り出して表示する
+$stmt = $pdo->prepare("SELECT * FROM gs_bm_table WHERE id=:id;");
+$stmt->bindValue(":id", $id, PDO::PARAM_INT);
+$status = $stmt->execute();
+
+if($status==false) {
+  //execute（SQL実行時にエラーがある場合）
+  sql_error($stmt);
+  
+}else{
+  //SQL成功の場合
+  $row = $stmt->fetch();//1レコードだけ取得する方法 stmt->fetch
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>データ登録</title>
+  <title>登録内容</title>
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <style>
     div{padding: 10px;font-size:16px;}
@@ -26,15 +48,16 @@
 <!-- Head[End] -->
 
 <!-- Main[Start] -->
-<form method="post" action="insert.php">
+<form method="post" action="update.php">
   <div class="jumbotron">
    <fieldset>
     <legend>お気に入りBOOK管理DB</legend>
-     <label>タイトル：<input type="text" name="book_title"></label><br>
-     <label>ジャンル:<input type="text" name="book_genre"></label><br>
-     <label>Google BooksのURL:<input type="text" name="book_url"></label><br>
-     <label>感想:<textArea name="book_comment" rows="4" cols="40"></textArea></label><br>
-     <input type="submit" value="登録">
+     <label>タイトル：<input type="text" name="book_title" value="<?=$row["book_title"]?>"></label><br>
+     <label>ジャンル:<input type="text" name="book_genre" value="<?=$row["book_genre"]?>"></label><br>
+     <label>Google BooksのURL:<input type="text" name="book_url" value="<?=$row["book_url"]?>"></label><br>
+     <label>感想:<textArea name="book_comment" rows="4" cols="40"><?=$row["book_comment"]?></textArea></label><br>
+     <input type="hidden" name="id" value="<?=$id?>"><!-- idを隠して、update.phpに送信 -->
+     <input type="submit" value="更新">
     </fieldset>
   </div>
 </form>
